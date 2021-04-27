@@ -4,7 +4,18 @@ validmove(2,7). validmove(2,9).
 
 validmove(3,10). validmove(3,8).
 
-validmove(4,1). validmove(4,11). validmove(4,6). validmove(4,13).
+validmove(4,1) :-
+    retract(row1([_,"O"])),            /*Place to move needs to be open*/
+    assert(row1(["        ","X"])),    /*make it X*/ 
+    
+    retract(row3([_,"X",_,_,_,_])),             /*peg to move needs to be exist*/
+    assert(row3(["   ","O","","X","","X"])),    /*make it "O"*/
+    
+    retract(row2([_,"X",_,_])),           /*peg between needs to exist*/
+    assert(row2(["      ","O"," ","X"])). /*make it "O"*/
+    
+    
+validmove(4,11). validmove(4,6). validmove(4,13).
 
 validmove(5,14). validmove(5,12).
 
@@ -32,7 +43,9 @@ move(Start, End) :-
     validmove(Start, End),
     drawboard.
 
-
+move(_,_) :-
+    write("!NOT A VALID MOVE!"), nl, 
+    drawboard.
 
 drawboard :-
     row1(A),
@@ -51,6 +64,7 @@ drawboard :-
 rowcheck :-
     row1([_,"X"]).
   */  
+  
 go :-
     assert(row1(["        ","O"])),
     assert(row2(["      ","X"," ","X"])),
@@ -66,5 +80,7 @@ go :-
     write("      4  5  6      "), nl,
     write("    7  8  9  10    "), nl,
     write("11 12 13 14 15"), nl,
+    write("make your moves with the move(X,Y). Command"), nl,
+    write("where is 'X' is peg to move and 'Y' is location to jump to"), nl,
     drawboard.
     
